@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Xstore</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#0d1017;color:#fff}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+header{position:sticky;top:0;z-index:99;background:#151923;border-bottom:1px solid #292e3a;padding:14px 5%;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:22px;font-weight:bold;color:#7c5cff}.nav{display:flex;gap:8px;align-items:center}
+.btn{border:0;border-radius:9px;padding:10px 14px;background:#242936;color:white}.btn:hover{filter:brightness(1.15)}
+.primary{background:#7657ff}.danger{background:#e5484d}.green{background:#24a66a}
+.hero{padding:65px 5%;text-align:center;background:radial-gradient(circle at top,#252046,#10131c 65%)}
+.hero h1{font-size:42px;margin-bottom:12px}.hero h1 span{color:#7c5cff}.hero p{color:#aeb5c4;margin-bottom:25px}
+.search{max-width:650px;margin:auto}.search input{width:100%;padding:15px;background:#1c202b;color:white;border:1px solid #343a48;border-radius:11px;outline:none}
+.container{width:90%;max-width:1200px;margin:30px auto}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:25px}
+select,input,textarea{background:#1b1f29;color:white;border:1px solid #343a48;border-radius:9px;padding:11px;outline:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:18px}
+.card{background:#171b24;border:1px solid #292e3a;border-radius:14px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-3px);border-color:#7657ff}
+.card-image{height:145px;background:#242936;display:flex;align-items:center;justify-content:center;font-size:48px;overflow:hidden}.card-image img{width:100%;height:100%;object-fit:cover;display:block}
+.card-body{padding:16px}.game{color:#8f97a8;font-size:13px}.card h3{margin:7px 0}
+.price{color:#55dda0;font-size:20px;font-weight:bold;margin:12px 0}.seller{color:#8f97a8;font-size:13px;margin-bottom:12px}.full{width:100%}
+.modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);padding:20px;align-items:center;justify-content:center}
+.modal-box{width:100%;max-width:520px;max-height:90vh;overflow:auto;background:#171b24;border:1px solid #343a48;border-radius:15px;padding:23px;position:relative}
+.close{position:absolute;right:15px;top:12px;background:none;color:white;border:0;font-size:25px}
+.form{display:flex;flex-direction:column;gap:10px;margin-top:18px}.form input,.form textarea,.form select{width:100%}
+.form textarea{min-height:100px;resize:vertical}.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:15px}
+.stat{background:#202531;padding:15px;border-radius:10px}.stat b{display:block;font-size:22px;color:#8d73ff}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.order{background:#202531;border:1px solid #303746;padding:14px;border-radius:10px;margin-top:10px}
+.badge{display:inline-block;padding:5px 8px;border-radius:7px;font-size:12px;background:#343a48}
+footer{text-align:center;color:#737b8d;padding:40px 10px}.empty{text-align:center;padding:50px 10px;color:#777f90}.report-box{background:#202531;border:1px solid #303746;padding:14px;border-radius:10px;margin-top:10px}.report-new{border-left:3px solid #e5484d}.report-read{opacity:.78}.mail-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.mail-meta{color:#8f97a8;font-size:12px;margin-top:5px}.report-message{white-space:pre-wrap;color:#d9deea;margin-top:10px;line-height:1.5}.chat-box{background:#11151d;border:1px solid #303746;border-radius:12px;padding:12px;max-height:50vh;overflow:auto}.chat-msg{padding:9px 11px;border-radius:10px;margin:7px 0;max-width:85%;white-space:pre-wrap}.chat-me{margin-left:auto;background:#7657ff}.chat-other{margin-right:auto;background:#242936}.chat-meta{font-size:11px;color:#aeb5c4;margin-top:4px}.loading-screen{position:fixed;inset:0;z-index:9999;background:#0d1017;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;transition:opacity .35s}.loading-screen.hide{opacity:0;pointer-events:none}.loader{width:42px;height:42px;border:4px solid #2b3040;border-top-color:#7c5cff;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.stars{letter-spacing:2px;color:#ffd54a}.rating-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rating-btn{font-size:25px;background:none;border:0;padding:2px;color:#5d6474}.rating-btn.active,.rating-btn:hover{color:#ffd54a}.review{background:#202531;border:1px solid #303746;padding:12px;border-radius:10px;margin-top:9px}.review-meta{font-size:12px;color:#8f97a8;margin-top:4px}.notif-badge{display:inline-flex;min-width:18px;height:18px;padding:0 5px;align-items:center;justify-content:center;border-radius:99px;background:#e5484d;color:#fff;font-size:10px;font-weight:bold;margin-left:4px}
+@media(max-width:600px){.hero h1{font-size:31px}header{padding:12px 4%}.logo{font-size:18px}.nav .btn{padding:8px 9px;font-size:12px}}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#202636;border:1px solid #394257;display:inline-flex;align-items:center;justify-content:center;font-weight:800;color:#fff;flex:0 0 38px}.avatar.sm{width:30px;height:30px;flex-basis:30px;font-size:12px}.avatar.lg{width:72px;height:72px;flex-basis:72px;font-size:24px}.profile-line{display:flex;align-items:center;gap:10px}.profile-card{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid #303746;border-radius:14px;background:#111621}</style>
+<style id="role-command-ui-css">
+.role-title{font-size:.72em;font-weight:800;margin-left:5px;vertical-align:middle}
+.role-owner{background:linear-gradient(90deg,#ff3b30,#ffcc00,#34c759,#0a84ff,#af52de,#ff2d55);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:300% 100%;animation:xRoleRainbow 3s linear infinite}
+.role-admin{color:#ffd60a}.role-user{color:#fff}
+@keyframes xRoleRainbow{to{background-position:300% 0}}
+.command-confirm-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}
+.command-confirm-box{width:min(420px,100%);background:#111621;border:1px solid #343c50;border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.command-confirm-code{margin:12px 0;padding:12px;background:#080c13;border-radius:10px;word-break:break-all;color:#dfe7f5;font-family:monospace}
+</style>
+<style id="xstore-global-chat-css">
+#globalChatBtn{position:fixed;right:18px;bottom:18px;z-index:9998;border:0;border-radius:999px;padding:13px 18px;background:#171717;color:#fff;font-weight:800;box-shadow:0 8px 30px #0007;cursor:pointer}
+#globalChatBtn .gc-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#34c759;margin-right:7px}
+#globalChatPanel{position:fixed;right:18px;bottom:76px;width:min(390px,calc(100vw - 28px));height:min(600px,calc(100vh - 110px));z-index:9999;background:#0d0d0f;color:#fff;border:1px solid #29292d;border-radius:18px;box-shadow:0 18px 60px #000b;display:none;overflow:hidden}
+#globalChatPanel.open{display:flex;flex-direction:column}
+.gc-head{display:flex;align-items:center;justify-content:space-between;padding:14px 15px;border-bottom:1px solid #29292d;background:#151518}
+.gc-head strong{font-size:16px}.gc-head small{display:block;color:#8e8e93;margin-top:2px}
+.gc-close{background:#252529;border:0;color:#fff;border-radius:9px;padding:7px 10px;cursor:pointer}
+.gc-messages{flex:1;overflow:auto;padding:13px}
+.gc-msg{display:flex;gap:9px;margin-bottom:13px;align-items:flex-start}
+.gc-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#27272b;flex:none}
+.gc-body{min-width:0}.gc-name{font-weight:800;font-size:13px}.gc-time{font-size:10px;color:#777;margin-left:6px;font-weight:400}
+.gc-text{font-size:14px;line-height:1.4;word-break:break-word;margin-top:2px}
+.gc-system{text-align:center;color:#777;font-size:12px;margin:10px 0}
+.gc-form{display:flex;gap:8px;padding:11px;border-top:1px solid #29292d;background:#151518}
+#globalChatInput{flex:1;min-width:0;background:#242428;border:1px solid #343439;color:#fff;border-radius:10px;padding:10px 12px;outline:none}
+#globalChatSend{border:0;background:#fff;color:#000;border-radius:10px;padding:0 14px;font-weight:800;cursor:pointer}
+.gc-empty{text-align:center;color:#777;padding:45px 15px}
+</style>
+
+<style id="xstore-chat-buttons-v13">.gc-confirm-box{animation:gcPop .18s ease-out}.gc-confirm-actions button{min-width:120px;transition:.15s;border:0!important}.gc-confirm-no{background:linear-gradient(135deg,#34343b,#202025)!important;color:#fff!important;border:1px solid #555!important}.gc-confirm-yes{background:linear-gradient(135deg,#7c4dff,#5b32d6)!important;color:#fff!important;box-shadow:0 7px 22px #7045ff55}.gc-confirm-no:hover,.gc-confirm-yes:hover{transform:translateY(-2px);filter:brightness(1.1)}.gc-confirm-no:active,.gc-confirm-yes:active{transform:scale(.96)}.gc-confirm-no:before{content:'✕ ';}.gc-confirm-yes:before{content:'✓ ';}@keyframes gcPop{from{opacity:0;transform:scale(.94) translateY(6px)}to{opacity:1;transform:scale(1) translateY(0)}}</style><style id="xstore-roblox-filter-css">#robloxFilter{min-width:180px;border:1px solid #6546e8;box-shadow:0 0 0 1px #6546e822;background:#17131f}</style>
+
+</head>
+<body>
+<div id="loadingScreen" class="loading-screen"><div class="loader"></div><b>Membuka Xstore...</b><span class="game">Menyiapkan produk dan pesanan</span></div>
+
+<header>
+<div class="logo">Xstore</div>
+<div class="nav">
+<button class="btn" onclick="openLogin()" id="loginBtn">Login</button>
+<button class="btn primary" onclick="openSell()" id="sellBtn">Jual</button>
+<button class="btn" onclick="openDashboard()" id="dashBtn" style="display:none">Dashboard</button><button class="btn" onclick="openProfileSettings()" id="profileBtn" style="display:none">👤 Profil</button>
+<button class="btn" onclick="openChatInbox()" id="chatBtn" style="display:none">💬 Chat <span id="chatBadge" class="notif-badge" style="display:none">0</span></button>
+<button class="btn" onclick="openAdminPanel()" id="adminBtn" style="display:none">Admin</button>
+<button class="btn" onclick="openOwnerPanel()" id="ownerBtn" style="display:none">Owner</button>
+<button class="btn danger" onclick="logout()" id="logoutBtn" style="display:none">Keluar</button>
+</div>
+</header>
+
+<section class="hero">
+<h1>Marketplace <span>Xstore</span></h1>
+
+<div class="search"><input id="search" placeholder="Cari produk atau game..." oninput="renderProducts()"></div>
+</section>
+
+<main class="container">
+<div class="toolbar">
+<select id="gameFilter" onchange="renderProducts()">
+<option value="all">Semua</option>
+</select>
+<select id="sort" onchange="renderProducts()">
+<option value="new">Terbaru</option><option value="cheap">Harga Terendah</option><option value="expensive">Harga Tertinggi</option>
+</select>
+<select id="robloxFilter" onchange="renderProducts()" style="display:none">
+<option value="all">Semua Game Roblox</option>
+<option value="Catch and Tame">Catch and Tame</option>
+<option value="Blox Fruits">Blox Fruits</option>
+<option value="Fish It">Fish It</option>
+<option value="Grow a Garden">Grow a Garden</option>
+<option value="Grow a Garden 2">Grow a Garden 2</option>
+<option value="Lainnya">Roblox Lainnya</option>
+</select>
+</div>
+
+<div class="row" style="margin-bottom:15px">
+<h3>Produk</h3><span id="productCount" class="badge">0 Produk</span>
+</div>
+<div id="products" class="grid"></div>
+</main>
+
+<div class="modal" id="detailModal"><div class="modal-box">
+<button class="close" onclick="closeModal('detailModal')">×</button><div id="detail"></div>
+</div></div>
+
+<div class="modal" id="loginModal"><div class="modal-box">
+<button class="close" onclick="closeModal('loginModal')">×</button><h2>Login</h2>
+<div class="form">
+<input id="loginEmail" type="email" placeholder="Email"><input id="loginPassword" type="password" placeholder="Password">
+<button class="btn primary" onclick="login()">Login</button><button class="btn" onclick="openRegister()">Belum punya akun? Register</button>
+</div></div></div>
+
+<div class="modal" id="registerModal"><div class="modal-box">
+<button class="close" onclick="closeModal('registerModal')">×</button><h2>Register</h2>
+<div class="form">
+<input id="regName" placeholder="Nama"><input id="regEmail" type="email" placeholder="Email"><input id="regPassword" type="password" placeholder="Password">
+<button class="btn primary" onclick="register()">Buat Akun</button>
+</div></div></div>
+
+<div class="modal" id="sellModal"><div class="modal-box">
+<button class="close" onclick="closeModal('sellModal')">×</button><h2 id="sellTitle">Jual Produk</h2>
+<div class="form">
+<div class="badge" style="width:max-content">✏️ Data produk bisa diedit kapan saja, termasuk setelah dipublikasikan</div>
+<input id="productName" placeholder="Nama produk">
+<select id="productGame" onchange="updateProductTypeOptions()"><optgroup label="Roblox"><option>Roblox</option><option>Blox Fruits</option><option>Grow a Garden</option><option>Grow a Garden 2</option><option>Catch and Tame</option><option>Fish It</option></optgroup><optgroup label="Game Lain"><option>Mobile Legends</option><option>Free Fire</option><option>Minecraft</option><option>Valorant</option><option>Genshin Impact</option><option>Fortnite</option></optgroup><option>Lainnya</option></select>
+<select id="productType"><option value="Akun">Akun</option><option value="Item">Item</option><option value="Admin Panel">Admin Panel</option><option value="Lainnya">Lainnya</option></select>
+<p id="productTypeHint" class="game">Untuk Roblox, pilih Item jika produk diberikan ke username pembeli.</p>
+<input id="productPrice" type="text" inputmode="decimal" placeholder="Harga jual (contoh: 300K, 1JT, 150000)">
+<input id="productStock" type="number" min="0" value="1" placeholder="Jumlah tersedia (0 = HABIS)">
+<div class="row" style="gap:8px">
+<button type="button" class="btn" onclick="document.getElementById('productStock').value=0">Set Stok 0</button>
+<button type="button" class="btn" onclick="document.getElementById('productStock').value=1">Set Stok 1</button>
+</div>
+<textarea id="productDescription" placeholder="Deskripsi produk"></textarea>
+<input id="productCommand" type="text" placeholder="Command produk (contoh: /trade {username})">
+<p class="game">Command bisa dipakai kapan saja. Gunakan <b>{username}</b> agar otomatis diganti username pembeli.</p>
+<input id="productDana" type="text" inputmode="numeric" placeholder="Nomor DANA penerima (opsional)">
+<label style="color:#9ba3b4;font-size:13px">QR pembayaran produk (opsional)</label>
+<input id="productQr" type="file" accept="image/*">
+<div id="productQrPreview"></div>
+<label style="color:#9ba3b4;font-size:13px">Gambar Produk (opsional)</label>
+<input id="productImage" type="file" accept="image/*">
+<div id="productImagePreview"></div>
+<button type="button" class="btn danger" id="removeQrBtn" style="display:none" onclick="removeProductQr()">🗑️ Hapus QR Produk</button>
+<button class="btn primary" onclick="saveProduct()">Simpan Produk</button>
+</div></div></div>
+
+<div class="modal" id="checkoutModal"><div class="modal-box">
+<button class="close" onclick="closeModal('checkoutModal')">×</button><div id="checkout"></div>
+</div></div>
+
+<div class="modal" id="profileModal"><div class="modal-box"><button class="close" onclick="closeModal('profileModal')">×</button><h2>👤 Pengaturan Profil</h2><div id="profileSettings"></div></div></div><div class="modal" id="dashboardModal"><div class="modal-box">
+<button class="close" onclick="closeModal('dashboardModal')">×</button><div id="dashboard"></div>
+</div></div>
+
+<div class="modal" id="chatModal"><div class="modal-box">
+<button class="close" onclick="closeModal('chatModal')">×</button><div id="chatContent"></div>
+</div></div>
+
+<div class="modal" id="reportModal"><div class="modal-box">
+<button class="close" onclick="closeModal('reportModal')">×</button>
+<h2>🚩 Kirim Report</h2>
+<p style="color:#9ba3b4;margin-top:8px">Report akan masuk ke kotak laporan Owner dan Admin.</p>
+<div class="form">
+<select id="reportType"><option>Seller</option><option>Buyer</option><option>User</option><option>Produk</option><option>Lainnya</option></select>
+<input id="reportTarget" placeholder="Nama / email yang dilaporkan">
+<input id="reportSubject" placeholder="Judul report">
+<textarea id="reportMessage" placeholder="Jelaskan masalahnya..."></textarea>
+<button class="btn danger" onclick="submitReport()">Kirim Report</button>
+</div></div></div>
+
+<div class="container" style="text-align:center;padding-bottom:5px"><button class="btn danger" onclick="openReport()">🚩 Report / Laporkan</button></div>
+<footer>Xstore © 2026 • Update Produk v4 • Order & Buyer Target</footer>
+
+<script>
+const OWNER_EMAIL="reihanbagas99@gmail.com";
+const OWNER_PASSWORD="Fariz.12";
+
+let users=JSON.parse(localStorage.getItem("rm_users"))||[
+{id:1,name:"Owner",email:OWNER_EMAIL,password:OWNER_PASSWORD,role:"owner",banned:false}
+];
+
+// Migrasi akun Owner lama ke email Owner Xstore yang baru.
+// Kalau database lokal sudah punya Owner lama, akun itu dipindahkan, bukan membuat Owner kedua.
+let canonicalOwner=users.find(u=>u.role==="owner") || users.find(u=>String(u.email).toLowerCase()===OWNER_EMAIL.toLowerCase());
+if(!canonicalOwner){
+  canonicalOwner={id:Date.now(),name:"Owner",email:OWNER_EMAIL,password:OWNER_PASSWORD,role:"owner",banned:false};
+  users.push(canonicalOwner);
+}else{
+  canonicalOwner.name="Owner";
+  canonicalOwner.email=OWNER_EMAIL;
+  // Jangan reset password Owner setiap halaman dibuka.
+  // Password yang sudah tersimpan tetap dipakai.
+  if(!canonicalOwner.password) canonicalOwner.password=OWNER_PASSWORD;
+  canonicalOwner.role="owner";
+  canonicalOwner.banned=false;
+}
+
+let products=JSON.parse(localStorage.getItem("rm_products"))||[
+{id:1,name:"Blox Fruits Account",game:"Blox Fruits",price:150000,stock:1,description:"Contoh produk marketplace.",sellerId:1}
+];
+
+products=products.map(p=>({...p,type:p.type||"Akun"}));
+let orders=JSON.parse(localStorage.getItem("rm_orders"))||[];
+let bans=JSON.parse(localStorage.getItem("xstore_bans"))||{users:[],products:[]};
+let reports=JSON.parse(localStorage.getItem("xstore_reports"))||[];
+let messages=JSON.parse(localStorage.getItem("xstore_messages"))||[];
+let reviews=JSON.parse(localStorage.getItem("xstore_reviews"))||[];
+let currentUser=JSON.parse(localStorage.getItem("rm_current"))||JSON.parse(sessionStorage.getItem("rm_current"))||null;
+users=users.map(u=>({...u,avatar:u.avatar||""}));
+
+// Sinkronkan session lama dengan data user terbaru. Ini penting agar tombol Owner
+// tidak hilang hanya karena sessionStorage masih menyimpan role lama.
+if(currentUser){
+  const syncedUser=users.find(u=>u.id===currentUser.id) || users.find(u=>String(u.email).toLowerCase()===String(currentUser.email).toLowerCase());
+  if(syncedUser){
+    currentUser=syncedUser;
+    localStorage.setItem("rm_current",JSON.stringify(currentUser)); sessionStorage.setItem("rm_current",JSON.stringify(currentUser));
+  }
+}
+let editingProduct=null;
+let editingQrData="";
+let editingImageData="";
+
+function saveData(){
+localStorage.setItem("rm_users",JSON.stringify(users));
+localStorage.setItem("rm_products",JSON.stringify(products));
+localStorage.setItem("rm_orders",JSON.stringify(orders));
+localStorage.setItem("xstore_bans",JSON.stringify(bans));
+localStorage.setItem("xstore_reports",JSON.stringify(reports));
+localStorage.setItem("xstore_messages",JSON.stringify(messages));
+localStorage.setItem("xstore_reviews",JSON.stringify(reviews));
+}
+
+function rupiah(number){
+return new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(number);
+}
+
+function icon(game){
+if(game==="Roblox")return "🎮";
+if(game==="Blox Fruits")return "🍎";
+if(game==="Mobile Legends")return "⚔️";
+if(game==="Free Fire")return "🔥";
+if(game==="Grow a Garden")return "🌱";
+if(game==="Catch and Tame")return "🐾";
+if(game==="Fish It")return "🎣";
+if(game==="Minecraft")return "⛏️";
+if(game==="Valorant")return "🎯";
+if(game==="Genshin Impact")return "✨";
+if(game==="Fortnite")return "🪂";
+return "🎮";
+}
+
+function safe(text){
+return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function roleTitle(user){
+const role=(user&&user.role)||"user";
+const label=role==="owner"?"owner":role==="admin"?"admin":"user";
+return '<span class="role-title role-'+label+'">('+label+')</span>';
+}
+function personName(user,fallback="Unknown"){
+if(!user)return safe(fallback);
+return safe(user.name||fallback)+' '+roleTitle(user);
+}
+
+function initials(name){return String(name||"?").trim().split(/\s+/).map(x=>x[0]).join("").slice(0,2).toUpperCase()||"?";}
+function avatarHTML(user,size=""){if(!user)return '<div class="avatar '+size+'">?</div>';const cls=('avatar '+size).trim();return user.avatar?'<img class="'+cls+'" src="'+safe(user.avatar)+'" alt="PP">':'<div class="'+cls+'">'+safe(initials(user.name))+'</div>';}
+function fileToAvatarDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const max=512,scale=Math.min(1,max/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*scale)),h=Math.max(1,Math.round(img.height*scale)),c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);resolve(c.toDataURL("image/jpeg",.82));};img.onerror=reject;img.src=r.result;};r.onerror=reject;r.readAsDataURL(file);});}
+
+function stockText(stock){
+if(Number(stock)<=0)return "HABIS";
+if(Number(stock)===1)return "TERAKHIR";
+return Number(stock)+" tersedia";
+}
+
+function toggleRobloxFilter(){
+const sub=document.getElementById("robloxFilter");
+if(sub){sub.style.display="none";sub.value="all";}
+}
+
+function renderProducts(){
+const box=document.getElementById("products");
+const count=document.getElementById("productCount");
+let list=[...products].filter(p=>!p.banned&&!bans.products.includes(p.id)&&!users.find(u=>u.id===p.sellerId)?.banned);
+
+const search=document.getElementById("search").value.toLowerCase();
+const game="all";
+const roblox="all";
+const sort=document.getElementById("sort").value;
+
+const robloxGames=["Blox Fruits","Grow a Garden","Grow a Garden 2","Catch and Tame","Fish It"];
+list=list.filter(p=>{
+const text=(p.name+" "+p.game+" "+p.description).toLowerCase();
+let gameMatch=true;
+if(game!=="all"){
+  gameMatch = game==="Roblox" ? (p.game==="Roblox" || robloxGames.includes(p.game)) : p.game===game;
+}
+let robloxMatch=true;
+if(game==="Roblox" && roblox!=="all"){
+  robloxMatch = roblox==="Lainnya" ? (p.game==="Roblox" || !robloxGames.includes(p.game)) : p.game===roblox;
+}
+return text.includes(search)&&gameMatch&&robloxMatch;
+});
+
+if(sort==="cheap")list.sort((a,b)=>a.price-b.price);
+if(sort==="expensive")list.sort((a,b)=>b.price-a.price);
+if(sort==="new")list.sort((a,b)=>b.id-a.id);
+
+count.textContent=list.length+" Produk";
+
+if(!list.length){
+box.innerHTML='<div class="empty">Produk tidak ditemukan.</div>';
+return;
+}
+
+box.innerHTML=list.map(p=>{
+const seller=users.find(u=>u.id===p.sellerId);
+return `
+<div class="card">
+<div class="card-image">${p.image?`<img src="${p.image}" alt="${safe(p.name)}">`:icon(p.game)}</div>
+<div class="card-body">
+<div class="game">${safe(p.game)} • ${safe(p.type||"Akun")}</div><div class="rating-row" style="margin-top:8px"><span class="stars">${ratingStars(p.id)}</span><span class="game">${ratingSummary(p.id)}</span></div><div class="game" style="margin-top:7px">🛒 ${buyerCount(p.id)} pembeli • ${purchaseCount(p.id)} pembelian</div>
+<h3>${safe(p.name)}</h3>
+<div class="seller profile-line">${avatarHTML(seller,"sm")}<span>Seller: ${personName(seller)}</span></div>
+<div class="price">${rupiah(p.price)}</div>
+<div class="seller">Stok: <b>${stockText(p.stock??1)}</b></div>
+<button class="btn primary full" onclick="showProduct(${p.id})">Lihat Produk</button>
+</div></div>`;
+}).join("");
+}
+
+function register(){
+const name=document.getElementById("regName").value.trim();
+const email=document.getElementById("regEmail").value.trim().toLowerCase();
+const password=document.getElementById("regPassword").value;
+if(!name||!email||!password){alert("Lengkapi semua data.");return;}
+if(users.some(u=>u.email===email)){alert("Email sudah terdaftar.");return;}
+users.push({id:Date.now(),name,email,password,role:"user",banned:false,avatar:""});
+saveData();
+alert("Akun berhasil dibuat.");
+closeModal("registerModal");
+openLogin();
+}
+
+function login(){
+const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+const password=document.getElementById("loginPassword").value;
+const user=users.find(u=>u.email===email&&u.password===password);
+if(!user){alert("Email atau password salah.");return;}
+if(user.banned||bans.users.includes(user.id)){alert("Akun ini sedang dibanned.");return;}
+currentUser=user;
+localStorage.setItem("rm_current",JSON.stringify(user)); sessionStorage.setItem("rm_current",JSON.stringify(user));
+closeModal("loginModal");
+updateNav();
+alert("Login berhasil. Halo "+user.name);
+}
+
+function logout(){
+currentUser=null;
+localStorage.removeItem("rm_current"); sessionStorage.removeItem("rm_current");
+updateNav();
+alert("Berhasil logout.");
+}
+
+function updateNav(){
+// Selalu sinkronkan role Owner berdasarkan akun canonical.
+if(currentUser){
+  const fresh=users.find(u=>u.id===currentUser.id);
+  if(fresh){ currentUser=fresh; localStorage.setItem("rm_current",JSON.stringify(currentUser)); sessionStorage.setItem("rm_current",JSON.stringify(currentUser)); }
+}
+const login=document.getElementById("loginBtn");
+const sell=document.getElementById("sellBtn");
+const dash=document.getElementById("dashBtn");
+const admin=document.getElementById("adminBtn");
+const owner=document.getElementById("ownerBtn");
+const logout=document.getElementById("logoutBtn");
+if(currentUser){
+login.style.display="none";sell.style.display="block";dash.style.display="block";document.getElementById("profileBtn").style.display="block";document.getElementById("chatBtn").style.display="block";logout.style.display="block";
+admin.style.display=(currentUser.role==="admin")?"block":"none";
+owner.style.display=(currentUser.role==="owner" || String(currentUser.email).toLowerCase()===OWNER_EMAIL.toLowerCase())?"block":"none";
+}else{
+login.style.display="block";sell.style.display="none";dash.style.display="none";document.getElementById("profileBtn").style.display="none";document.getElementById("chatBtn").style.display="none";admin.style.display="none";owner.style.display="none";logout.style.display="none";
+}
+}
+
+function openAdminPanel(){
+if(!currentUser||currentUser.role!=="admin"){alert("Panel ini khusus Admin.");return;}
+openDashboard();
+}
+
+function openOwnerPanel(){
+// Owner ditentukan dari email canonical, jadi session lama dengan role "user"
+// tidak bisa membuat tombol Owner muncul tetapi kemudian menolak akses.
+const email=currentUser ? String(currentUser.email||"").trim().toLowerCase() : "";
+if(email===OWNER_EMAIL.toLowerCase()){
+  const ownerUser=users.find(u=>String(u.email||"").trim().toLowerCase()===OWNER_EMAIL.toLowerCase());
+  if(ownerUser){
+    ownerUser.name="Owner";
+    ownerUser.email=OWNER_EMAIL;
+    ownerUser.password=OWNER_PASSWORD;
+    ownerUser.role="owner";
+    ownerUser.banned=false;
+    bans.users=bans.users.filter(id=>id!==ownerUser.id);
+    currentUser=ownerUser;
+    localStorage.setItem("rm_current",JSON.stringify(currentUser)); sessionStorage.setItem("rm_current",JSON.stringify(currentUser));
+    saveData();
+    updateNav();
+    openDashboard();
+    return;
+  }
+}
+if(!currentUser||currentUser.role!=="owner"){alert("Panel ini khusus Owner.");return;}
+openDashboard();
+}
+
+function openLogin(){
+closeModal("registerModal");
+document.getElementById("loginModal").style.display="flex";
+}
+
+function openRegister(){
+closeModal("loginModal");
+document.getElementById("registerModal").style.display="flex";
+}
+
+function closeModal(id){
+const el=document.getElementById(id);
+if(el)el.style.display="none";
+}
+
+function openSell(){
+if(!currentUser){alert("Login terlebih dahulu.");openLogin();return;}
+editingProduct=null; editingQrData=""; editingImageData="";
+document.getElementById("sellTitle").textContent="Jual Produk";
+document.getElementById("productName").value="";
+document.getElementById("productGame").value="Roblox";
+document.getElementById("productType").value="Akun";
+updateProductTypeOptions();
+document.getElementById("productPrice").value="";
+document.getElementById("productStock").value=1;
+document.getElementById("productDescription").value="";
+document.getElementById("productCommand").value="";
+document.getElementById("productDana").value="";
+document.getElementById("productQr").value="";
+document.getElementById("productQrPreview").innerHTML="<span class=\"game\">Belum ada QR.</span>";
+document.getElementById("productImage").value="";
+document.getElementById("productImagePreview").innerHTML="<span class=\"game\">Belum ada gambar produk.</span>";
+document.getElementById("removeQrBtn").style.display="none";
+document.getElementById("sellModal").style.display="flex";
+}
+
+function parsePrice(value){
+let v=String(value).trim().toUpperCase().replace(/\s/g,"").replace(/^RP/,"");
+if(!v)return NaN;
+let multiplier=1;
+if(v.endsWith("JUTA")){multiplier=1000000;v=v.slice(0,-4);}
+else if(v.endsWith("JT")){multiplier=1000000;v=v.slice(0,-2);}
+else if(v.endsWith("T")){multiplier=1000000000000;v=v.slice(0,-1);}
+else if(v.endsWith("M")){multiplier=1000000;v=v.slice(0,-1);}
+else if(v.endsWith("K")){multiplier=1000;v=v.slice(0,-1);}
+if(multiplier>1){
+ v=v.replace(",",".");
+ const n=Number(v);
+ return Number.isFinite(n)?Math.round(n*multiplier):NaN;
+}
+v=v.replace(/\./g,"").replace(",",".");
+const n=Number(v);
+return Number.isFinite(n)?Math.round(n):NaN;
+}
+
+function fileToDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file);});}
+
+function updateProductTypeOptions(){
+ const game=document.getElementById("productGame").value;
+ const type=document.getElementById("productType");
+ const hint=document.getElementById("productTypeHint");
+ if(!type)return;
+ const current=type.value;
+ if(game==="Roblox"){
+   type.innerHTML='<option value="Akun">Akun</option><option value="Item">Item</option><option value="Admin Panel">Admin Panel</option><option value="Lainnya">Lainnya</option>';
+   if(["Akun","Item","Admin Panel","Lainnya"].includes(current)) type.value=current;
+   hint.textContent="Roblox Item akan meminta username Roblox pembeli saat checkout dan username itu terlihat oleh seller.";
+ }else{
+   type.innerHTML='<option value="Akun">Akun</option><option value="Admin Panel">Admin Panel</option><option value="Lainnya">Lainnya</option>';
+   type.value=current==="Admin Panel"?"Admin Panel":"Akun";
+   hint.textContent=type.value==="Admin Panel"?"Admin Panel meminta email pembeli saat checkout.":"Admin Panel khusus akan meminta email pembeli.";
+ }
+}
+
+function deliveryTargetLabel(product){
+ if(product.type==="Admin Panel") return {label:"Email pembeli",placeholder:"Masukkan email pembeli",kind:"email"};
+ if(product.game==="Roblox" && product.type==="Item") return {label:"Username Roblox",placeholder:"Masukkan username Roblox pembeli",kind:"username"};
+ return null;
+}
+
+function removeProductQr(){
+ editingQrData="";
+ const input=document.getElementById("productQr");
+ if(input)input.value="";
+ document.getElementById("productQrPreview").innerHTML="<span class=\"game\">QR akan dihapus saat produk disimpan.</span>";
+ document.getElementById("removeQrBtn").style.display="none";
+}
+
+function editProduct(id){
+if(!currentUser){alert("Login dahulu.");return;}
+const product=products.find(p=>p.id===id);
+if(!product||product.sellerId!==currentUser.id){alert("Kamu tidak punya izin mengedit produk ini.");return;}
+editingProduct=id;
+document.getElementById("sellTitle").textContent="Edit Produk";
+document.getElementById("productName").value=product.name||"";
+document.getElementById("productGame").value=product.game||"Roblox";
+updateProductTypeOptions();
+document.getElementById("productType").value=product.type||"Akun";
+document.getElementById("productPrice").value=product.price??"";
+document.getElementById("productStock").value=product.stock??1;
+document.getElementById("productDescription").value=product.description||"";
+document.getElementById("productCommand").value=product.command||"";
+document.getElementById("productDana").value=product.dana||"";
+document.getElementById("productQr").value="";
+editingQrData=product.qr||"";
+editingImageData=product.image||"";
+document.getElementById("productImage").value="";
+document.getElementById("productImagePreview").innerHTML=editingImageData?`<img src="${editingImageData}" style="max-width:240px;width:100%;border-radius:10px;margin-top:6px"><p class="game">Gambar tersimpan. Upload baru untuk menggantinya.</p>`:`<span class="game">Belum ada gambar produk.</span>`;
+document.getElementById("productQrPreview").innerHTML=editingQrData?`<img src="${editingQrData}" style="max-width:180px;border-radius:10px;margin-top:6px;background:white;padding:6px"><p class="game">QR tersimpan. Upload QR baru untuk menggantinya.</p>`:"<span class=\"game\">Belum ada QR.</span>";
+document.getElementById("removeQrBtn").style.display=editingQrData?"block":"none";
+closeModal("dashboardModal");
+document.getElementById("sellModal").style.display="flex";
+}
+
+function deleteProduct(id){
+if(!currentUser){alert("Login dahulu.");return;}
+const index=products.findIndex(p=>p.id===id);
+if(index===-1)return;
+if(products[index].sellerId!==currentUser.id){alert("Kamu tidak punya izin menghapus produk ini.");return;}
+if(!confirm("Hapus produk ini?"))return;
+products.splice(index,1);
+saveData();
+renderProducts();
+openDashboard();
+alert("Produk berhasil dihapus.");
+}
+
+function compressProductImage(file){return new Promise((resolve,reject)=>{const img=new Image();const r=new FileReader();r.onload=()=>{img.onload=()=>{const max=900;let w=img.width,h=img.height;if(w>max||h>max){const scale=Math.min(max/w,max/h);w=Math.round(w*scale);h=Math.round(h*scale);}const c=document.createElement("canvas");c.width=w;c.height=h;const ctx=c.getContext("2d");ctx.drawImage(img,0,0,w,h);resolve(c.toDataURL("image/jpeg",0.78));};img.onerror=reject;img.src=r.result;};r.onerror=reject;r.readAsDataURL(file);});}
+
+async function saveProduct(){
+if(!currentUser){alert("Login dahulu.");return;}
+const name=document.getElementById("productName").value.trim();
+const game=document.getElementById("productGame").value;
+const type=document.getElementById("productType").value;
+const price=parsePrice(document.getElementById("productPrice").value);
+const stock=Number(document.getElementById("productStock").value);
+const description=document.getElementById("productDescription").value.trim();
+const command=document.getElementById("productCommand").value.trim();
+const dana=document.getElementById("productDana").value.trim();
+const qrFile=document.getElementById("productQr").files[0];
+const imageFile=document.getElementById("productImage").files[0];
+if(!name||!description||!Number.isFinite(price)||price<0||!Number.isSafeInteger(price)||!Number.isInteger(stock)||stock<0){alert("Nama, deskripsi, harga, dan stok harus valid.");return;}
+if(dana && !/^[0-9+\- ]{8,20}$/.test(dana)){alert("Nomor DANA tidak valid.");return;}
+if(qrFile && qrFile.size>2*1024*1024){alert("Foto QR maksimal 2 MB.");return;}
+if(imageFile && imageFile.size>8*1024*1024){alert("Gambar produk maksimal 8 MB.");return;}
+let qr=editingQrData||"";
+let image=editingImageData||"";
+try{if(qrFile)qr=await fileToDataUrl(qrFile);if(imageFile)image=await compressProductImage(imageFile);}catch(e){alert("File gambar gagal diproses.");return;}
+if(editingProduct){
+ const product=products.find(p=>p.id===editingProduct);
+ if(!product||product.sellerId!==currentUser.id){alert("Kamu tidak punya izin.");return;}
+ product.name=name;product.game=game;product.type=type;product.price=price;product.stock=stock;product.description=description;product.command=command;product.dana=dana;product.qr=qr;product.image=image;
+}else{
+ products.push({id:Date.now(),name,game,type,price,stock,description,command,sellerId:currentUser.id,banned:false,dana,qr,image});
+}
+try{saveData();}catch(e){alert("Gagal menyimpan. Penyimpanan browser mungkin penuh karena file QR.");return;}
+renderProducts();closeModal("sellModal");openDashboard();alert("Produk berhasil disimpan.");
+}
+
+
+function validPurchaseOrders(productId){return orders.filter(o=>o.productId===productId&&o.status!=="Ditolak");}
+function purchaseCount(productId){return validPurchaseOrders(productId).length;}
+function buyerCount(productId){return new Set(validPurchaseOrders(productId).map(o=>o.buyerId)).size;}
+function productReviews(productId){return reviews.filter(r=>r.productId===productId);}
+function ratingAverage(productId){const rs=productReviews(productId);if(!rs.length)return "0.0";return (rs.reduce((a,r)=>a+Number(r.rating||0),0)/rs.length).toFixed(1);}
+function ratingStars(productId,size=18){const avg=Math.round(Number(ratingAverage(productId)));return [1,2,3,4,5].map(i=>i<=avg?"★":"☆").join("");}
+function ratingSummary(productId){const rs=productReviews(productId);return rs.length?ratingAverage(productId)+"/5":"Belum ada rating";}
+function hasVerifiedPurchase(productId){return !!currentUser&&orders.some(o=>o.productId===productId&&o.buyerId===currentUser.id&&o.status==="Diverifikasi");}
+function productReviewsHtml(productId){
+ const rs=productReviews(productId).slice().reverse();
+ let box="";
+ if(hasVerifiedPurchase(productId)&&!rs.some(r=>r.buyerId===currentUser.id)){
+   box+=`<div class="review" style="margin-top:12px"><b>Kasih rating produk ini</b><div id="ratingPicker" class="rating-row" style="margin-top:6px">${[1,2,3,4,5].map(i=>`<button class="rating-btn" onclick="setRating(${i})" aria-label="${i} bintang">☆</button>`).join("")}</div><textarea id="reviewComment" placeholder="Komentar tentang produk (opsional)" style="width:100%;margin-top:8px;min-height:70px"></textarea><button class="btn primary" style="margin-top:8px" onclick="submitReview(${productId})">Kirim Rating</button></div>`;
+ }
+ if(!rs.length) box+='<p class="empty" style="padding:22px 5px">Belum ada rating atau komentar.</p>';
+ else box+=rs.map(r=>{const u=users.find(x=>x.id===r.buyerId);return `<div class="review"><b>${personName(u,"Pembeli")}</b><div class="stars">${"★".repeat(Number(r.rating))}${"☆".repeat(5-Number(r.rating))}</div>${r.comment?`<div style="margin-top:7px;color:#d9deea;white-space:pre-wrap">${safe(r.comment)}</div>`:""}<div class="review-meta">${safe(r.date)}</div></div>`}).join("");
+ return box;
+}
+let selectedRating=0;
+function setRating(n){selectedRating=n;document.querySelectorAll("#ratingPicker .rating-btn").forEach((b,i)=>b.classList.toggle("active",i<n));}
+function submitReview(productId){if(!hasVerifiedPurchase(productId)){alert("Kamu hanya bisa memberi rating setelah pesanan diverifikasi.");return;}if(productReviews(productId).some(r=>r.buyerId===currentUser.id)){alert("Kamu sudah memberi rating untuk produk ini.");return;}if(!selectedRating){alert("Pilih bintang 1-5 terlebih dahulu.");return;}const comment=(document.getElementById("reviewComment")?.value||"").trim();reviews.push({id:Date.now()+Math.random(),productId,buyerId:currentUser.id,rating:selectedRating,comment,date:new Date().toLocaleString("id-ID")});selectedRating=0;saveData();renderProducts();showProduct(productId);alert("Rating berhasil dikirim.");}
+
+function showProduct(id){
+const p=products.find(x=>x.id===id); if(!p)return;
+const seller=users.find(u=>u.id===p.sellerId); const soldOut=Number(p.stock)<=0;
+const payInfo=p.dana||p.qr?`<hr style="margin:18px 0;border-color:#303746"><h3>Pembayaran DANA</h3>${p.dana?`<p style="margin-top:8px">Nomor DANA: <b>${safe(p.dana)}</b></p>`:""}${p.qr?`<img src="${p.qr}" alt="QR pembayaran" style="display:block;max-width:240px;width:100%;margin:12px auto;border-radius:10px;background:white;padding:8px">`:""}`:"";
+const reviewsHtml=productReviewsHtml(p.id);
+document.getElementById("detail").innerHTML=`${p.image?`<img src="${p.image}" alt="${safe(p.name)}" style="display:block;width:100%;max-height:280px;object-fit:cover;border-radius:12px;margin-bottom:14px">`:""}<h2>${safe(p.name)}</h2><p class="game">${safe(p.game)} • ${safe(p.type||"Akun")}</p><div class="rating-row" style="margin-top:10px"><span class="stars">${ratingStars(p.id,24)}</span><b>${ratingAverage(p.id)}</b><span class="game">(${reviews.length?reviews.filter(r=>r.productId===p.id).length:0} rating)</span></div><p class="game" style="margin-top:8px">🛒 Dibeli oleh <b>${buyerCount(p.id)}</b> orang • ${purchaseCount(p.id)} pembelian</p><br><p>${safe(p.description)}</p>${p.command?`<div class="review" style="margin-top:12px"><b>⚡ Command Produk</b><div class="row" style="margin-top:8px"><code id="productCommandDisplay" style="flex:1;word-break:break-all;background:#111722;padding:10px;border-radius:8px">${safe(p.command)}</code><button class="btn" onclick="copyProductCommand(${p.id})">📋 Salin</button></div><p class="game" style="margin-top:6px">Command tersedia kapan saja. <b>{username}</b> akan diganti username pembeli saat tersedia.</p></div>`:""}<div class="price">${rupiah(p.price)}</div><p class="seller">Seller: ${personName(seller)}</p><p class="seller">Stok: <b>${stockText(p.stock??1)}</b></p>${payInfo}<button class="btn primary full" ${soldOut?"disabled":""} onclick="checkout(${p.id})">${soldOut?"Stok Habis":"Beli dengan DANA"}</button><hr style="margin:20px 0;border-color:#303746"><h3>⭐ Rating & Komentar</h3>${reviewsHtml}`;
+document.getElementById("detailModal").style.display="flex";
+}
+function checkout(id){
+if(!currentUser){alert("Login dahulu sebelum membeli.");closeModal("detailModal");openLogin();return;}
+const p=products.find(x=>x.id===id); if(!p)return; if(Number(p.stock)<=0){alert("Produk sudah habis.");return;}
+const pay=p.dana||"Belum diatur";
+const target=deliveryTargetLabel(p);
+const targetField=target?`<div class="form"><label style="color:#9ba3b4">${safe(target.label)}</label><input id="buyerTarget" type="${target.kind==='email'?'email':'text'}" placeholder="${safe(target.placeholder)}" autocomplete="off"></div>`:"";
+document.getElementById("checkout").innerHTML=`<h2>Checkout</h2><br><p>Produk: <b>${safe(p.name)}</b></p><p>Jenis: <b>${safe(p.type||"Akun")}</b></p><p>Total: <b>${rupiah(p.price)}</b></p><p>Stok saat ini: <b>${stockText(p.stock??1)}</b></p>${targetField}${p.command?`<div class="review" style="margin-top:14px"><b>⚡ Command Produk</b><p id="checkoutCommandPreview" style="margin-top:7px;word-break:break-all;background:#111722;padding:10px;border-radius:8px">${safe(p.command)}</p></div>`:""}<div style="margin-top:16px;padding:12px;border:1px solid #e5484d;border-radius:10px;background:#2a171a;color:#ffb4b4"><b>⚠️ Peringatan Pembelian</b><br><span style="font-size:13px">Ketika membeli, dana yang sudah dibayarkan tidak dapat dikembalikan. Pastikan data pembelian dan nominal pembayaran sudah benar.</span></div><label style="display:flex;gap:8px;align-items:flex-start;margin-top:12px;color:#d9deea;font-size:13px"><input id="refundAgree" type="checkbox" style="width:auto;margin-top:3px"> Saya sudah membaca dan memahami peringatan bahwa dana tidak dapat dikembalikan.</label><hr style="margin:18px 0;border-color:#303746"><h3>Pembayaran DANA</h3><p style="color:#9ba3b4;margin-top:8px">Nomor DANA penjual:</p><h2 style="color:#55dda0">${safe(pay)}</h2>${p.qr?`<img src="${p.qr}" alt="QR pembayaran" style="display:block;max-width:260px;width:100%;margin:12px auto;border-radius:10px;background:white;padding:8px">`:""}<p style="color:#9ba3b4;margin-top:10px">Bayar sesuai harga produk, lalu masukkan referensi pembayaran.</p><div class="form"><input id="paymentRef" placeholder="Nomor referensi pembayaran"><textarea id="buyerNote" placeholder="Catatan / komentar untuk seller (opsional)" style="min-height:75px"></textarea><button class="btn primary" onclick="createOrder(${p.id})">Saya Sudah Bayar</button></div>`;
+closeModal("detailModal");document.getElementById("checkoutModal").style.display="flex";
+}
+
+function commandForProduct(product, buyerTarget){
+ return String(product.command||"").replace(/\{username\}/gi, buyerTarget || currentUser?.name || "{username}");
+}
+async function copyText(text){
+ try{await navigator.clipboard.writeText(text);alert("Command berhasil disalin.");}
+ catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();alert("Command berhasil disalin.");}
+}
+let pendingCommandText="";
+function askCommand(text){
+ pendingCommandText=String(text||"");
+ if(!pendingCommandText)return;
+ const modal=document.getElementById("commandConfirm");
+ document.getElementById("commandConfirmText").textContent=pendingCommandText;
+ modal.style.display="flex";
+}
+function answerCommand(yes){
+ const text=pendingCommandText;
+ pendingCommandText="";
+ document.getElementById("commandConfirm").style.display="none";
+ if(yes)copyText(text);
+}
+function copyProductCommand(productId){
+ const p=products.find(x=>x.id===productId); if(!p||!p.command)return;
+ const target=deliveryTargetLabel(p);
+ let buyerTarget=""; if(target){const el=document.getElementById("buyerTarget"); if(el)buyerTarget=el.value.trim();}
+ askCommand(commandForProduct(p,buyerTarget));
+}
+
+function createOrder(productId){
+const ref=document.getElementById("paymentRef").value.trim();
+const buyerNote=(document.getElementById("buyerNote")?.value||"").trim();
+if(!ref){alert("Masukkan referensi pembayaran.");return;}
+const product=products.find(p=>p.id===productId);
+if(!product)return;
+if(Number(product.stock)<=0){alert("Produk sudah habis.");return;}
+const agree=document.getElementById("refundAgree");
+if(!agree||!agree.checked){alert("Centang persetujuan bahwa dana tidak dapat dikembalikan.");return;}
+const target=deliveryTargetLabel(product);
+let buyerTarget="";
+if(target){
+ buyerTarget=document.getElementById("buyerTarget").value.trim();
+ if(!buyerTarget){alert(`Masukkan ${target.label}.`);return;}
+ if(target.kind==="email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerTarget)){alert("Email pembeli tidak valid.");return;}
+ if(target.kind==="username" && !/^[A-Za-z0-9_]{3,20}$/.test(buyerTarget)){alert("Username Roblox tidak valid.");return;}
+}
+const commandResolved=(product.command||"").replace(/\{username\}/gi,buyerTarget||currentUser.name||"");
+orders.push({id:Date.now(),productId,buyerId:currentUser.id,sellerId:product.sellerId,productName:product.name,game:product.game,type:product.type||"Akun",buyerTarget,buyerNote,command:product.command||"",commandResolved,price:product.price,payment:"DANA",reference:ref,status:"Menunggu Verifikasi",date:new Date().toLocaleString("id-ID")});
+product.stock=Math.max(0,Number(product.stock)-1);
+saveData();renderProducts();closeModal("checkoutModal");
+alert("Order dibuat. Pesanan sudah masuk ke panel Owner/Admin dan stok diperbarui.");
+}
+function canManageOrder(o){
+return !!currentUser && (isStaff() || o.sellerId===currentUser.id);
+}
+
+function verifyOrder(orderId,action){
+ if(!currentUser){alert("Login dahulu.");return;}
+ const o=orders.find(x=>x.id===orderId); if(!o)return;
+ if(!canManageOrder(o)){alert("Pesanan ini hanya bisa diverifikasi oleh seller terkait atau Admin/Owner.");return;}
+ if(o.status!=="Menunggu Verifikasi"){alert("Pesanan ini sudah diproses.");return;}
+ if(action===true){
+   o.status="Diverifikasi";
+   o.verifiedBy=currentUser.id;
+   o.verifiedAt=new Date().toLocaleString("id-ID");
+   sendSystemMessage(o,"Pesanan telah diverifikasi oleh seller/admin.");
+ }else{
+   o.status="Ditolak";
+   o.rejectedBy=currentUser.id;
+   o.rejectedAt=new Date().toLocaleString("id-ID");
+   if(!o.stockRestored){
+     const product=products.find(p=>p.id===o.productId);
+     if(product){product.stock=Number(product.stock||0)+1;}
+     o.stockRestored=true;
+   }
+   sendSystemMessage(o,"Pesanan ditolak. Stok dikembalikan ke produk.");
+ }
+ saveData();renderProducts();openDashboard();
+}
+
+function sendSystemMessage(o,text){
+ messages.push({id:Date.now()+Math.random(),orderId:o.id,senderId:currentUser.id,recipientId:o.buyerId===currentUser.id?o.sellerId:o.buyerId,text:"🔔 "+text,date:new Date().toLocaleString("id-ID"),read:false,system:true});
+}
+
+function unreadMessages(){
+ if(!currentUser)return 0;
+ return messages.filter(m=>m.recipientId===currentUser.id&&!m.read).length;
+}
+function updateChatBadge(){
+ const badge=document.getElementById("chatBadge"); if(!badge)return;
+ const n=unreadMessages(); badge.textContent=n; badge.style.display=n?"inline-flex":"none";
+}
+function orderOtherUser(o){
+ const otherId=currentUser.id===o.buyerId?o.sellerId:o.buyerId;
+ return users.find(u=>u.id===otherId);
+}
+function myChatOrders(){
+ if(!currentUser)return [];
+ return orders.filter(o=>o.buyerId===currentUser.id||o.sellerId===currentUser.id);
+}
+function openChatInbox(){
+ if(!currentUser){alert("Login dahulu.");openLogin();return;}
+ const list=myChatOrders();
+ const box=document.getElementById("chatContent");
+ let html='<h2>💬 Chat Pesanan</h2><p class="game" style="margin-top:7px">Chat hanya tersedia antara buyer dan seller pada pesanan terkait.</p>';
+ if(!list.length){html+='<p class="empty">Belum ada pesanan untuk dibuatkan chat.</p>';}
+ else list.forEach(o=>{
+   const other=orderOtherUser(o), unread=messages.filter(m=>m.orderId===o.id&&m.recipientId===currentUser.id&&!m.read).length;
+   html+='<div class="order"><div class="row"><div class="profile-line">'+avatarHTML(other,'sm')+'<div><b>'+safe(o.productName||"Produk")+'</b><p class="game">Dengan: '+personName(other)+' • '+safe(o.status)+'</p></div></div><button class="btn primary" onclick="openOrderChat('+o.id+')">Buka Chat'+(unread?' <span class="notif-badge">'+unread+'</span>':'')+'</button></div></div>';
+ });
+ box.innerHTML=html;document.getElementById("chatModal").style.display="flex";updateChatBadge();
+}
+function openOrderChat(orderId){
+ if(!currentUser)return;
+ const o=orders.find(x=>x.id===orderId); if(!o)return;
+ if(o.buyerId!==currentUser.id&&o.sellerId!==currentUser.id){alert("Kamu bukan bagian dari pesanan ini.");return;}
+ const other=orderOtherUser(o);
+ messages.filter(m=>m.orderId===orderId&&m.recipientId===currentUser.id).forEach(m=>m.read=true);
+ const box=document.getElementById("chatContent");
+ const chatMsgs=messages.filter(m=>m.orderId===orderId).sort((a,b)=>Number(a.id)-Number(b.id));
+ box.innerHTML='<h2>💬 '+safe(o.productName||"Produk")+'</h2><p class="game">Chat dengan: '+personName(other)+' • Pesanan #'+safe(o.id)+'</p><div id="chatMessages" class="chat-box" style="margin-top:14px">'+(chatMsgs.length?chatMsgs.map(m=>'<div class="chat-msg '+(m.senderId===currentUser.id?'chat-me':'chat-other')+'">'+safe(m.text)+'<div class="chat-meta">'+safe(m.date)+'</div></div>').join(""):'<p class="empty" style="padding:30px 5px">Belum ada pesan.</p>')+'</div><div class="form"><textarea id="chatInput" placeholder="Tulis pesan ke '+safe(other?other.name:"user")+'..." style="min-height:75px"></textarea><div class="row"><button class="btn" onclick="openChatInbox()">← Daftar Chat</button><button class="btn primary" onclick="sendChat('+o.id+')">Kirim</button></div></div>';
+ document.getElementById("chatModal").style.display="flex";
+ const cm=document.getElementById("chatMessages");if(cm)cm.scrollTop=cm.scrollHeight;
+ updateChatBadge();
+}
+function sendChat(orderId){
+ if(!currentUser)return;
+ const o=orders.find(x=>x.id===orderId);if(!o)return;
+ const input=document.getElementById("chatInput");const text=input.value.trim();if(!text)return;
+ const recipientId=currentUser.id===o.buyerId?o.sellerId:o.buyerId;
+ const recipient=users.find(u=>u.id===recipientId);
+ messages.push({id:Date.now()+Math.random(),orderId,senderId:currentUser.id,recipientId,text,date:new Date().toLocaleString("id-ID"),read:false});
+ saveData();
+ if(recipient && "Notification" in window && Notification.permission==="granted") new Notification("Xstore • Pesan baru",{body:currentUser.name+": "+text.slice(0,80)});
+ openOrderChat(orderId);
+}
+function requestChatNotifications(){
+ if("Notification" in window && Notification.permission==="default") Notification.requestPermission().then(updateChatBadge).catch(()=>{});
+}
+
+function isStaff(){return currentUser&&(currentUser.role==="owner"||currentUser.role==="admin");}
+function isOwner(){return currentUser&&currentUser.role==="owner";}
+function banUser(id){
+ if(!isStaff())return;
+ const u=users.find(x=>x.id===id); if(!u)return;
+ if(u.role==="owner"){alert("Owner tidak bisa dibanned.");return;}
+ if(u.role==="admin"&&!isOwner()){alert("Admin lain hanya bisa dikelola Owner.");return;}
+ if(!confirm("Ban akun "+u.name+" ("+u.email+")?"))return;
+ u.banned=true; if(!bans.users.includes(id))bans.users.push(id); saveData(); openDashboard(); renderProducts();
+}
+function unbanUser(id){
+ if(!isStaff())return;
+ const u=users.find(x=>x.id===id); if(!u)return;
+ u.banned=false; bans.users=bans.users.filter(x=>x!==id); saveData(); openDashboard(); renderProducts();
+}
+function banProduct(id){
+ if(!isStaff())return;
+ const p=products.find(x=>x.id===id); if(!p)return;
+ if(!confirm("Ban produk ini?"))return;
+ p.banned=true; if(!bans.products.includes(id))bans.products.push(id); saveData(); openDashboard(); renderProducts();
+}
+function unbanProduct(id){
+ if(!isStaff())return;
+ const p=products.find(x=>x.id===id); if(!p)return;
+ p.banned=false; bans.products=bans.products.filter(x=>x!==id); saveData(); openDashboard(); renderProducts();
+}
+function toggleAdmin(id){
+ if(!isOwner())return;
+ const u=users.find(x=>x.id===id); if(!u||u.role==="owner")return;
+ u.role=u.role==="admin"?"user":"admin"; saveData(); openDashboard();
+}
+
+function openReport(){
+if(!currentUser){alert("Login terlebih dahulu untuk mengirim report.");openLogin();return;}
+document.getElementById("reportType").value="Seller";
+document.getElementById("reportTarget").value="";
+document.getElementById("reportSubject").value="";
+document.getElementById("reportMessage").value="";
+document.getElementById("reportModal").style.display="flex";
+}
+
+function submitReport(){
+if(!currentUser){alert("Login terlebih dahulu.");return;}
+const type=document.getElementById("reportType").value;
+const target=document.getElementById("reportTarget").value.trim();
+const subject=document.getElementById("reportSubject").value.trim();
+const message=document.getElementById("reportMessage").value.trim();
+if(!subject||!message){alert("Judul dan isi report wajib diisi.");return;}
+reports.unshift({id:Date.now(),reporterId:currentUser.id,reporterName:currentUser.name,reporterEmail:currentUser.email,type,target,subject,message,status:"Baru",date:new Date().toLocaleString("id-ID")});
+saveData();closeModal("reportModal");alert("Report berhasil dikirim ke Owner/Admin.");
+}
+
+function markReport(id){
+if(!isStaff())return;
+const r=reports.find(x=>x.id===id);if(!r)return;
+r.status=r.status==="Baru"?"Dibaca":"Baru";saveData();openDashboard();
+}
+
+function deleteReport(id){
+if(!isStaff())return;
+if(!confirm("Hapus report ini dari kotak laporan?"))return;
+reports=reports.filter(x=>x.id!==id);saveData();openDashboard();
+}
+
+function staffText(){return Array.from(arguments).filter(v=>v!==undefined&&v!==null).map(v=>String(v)).join(" ");}
+function filterStaffPanel(){
+const input=document.getElementById("staffSearch");
+const q=(input?input.value:"").trim().toLowerCase();
+document.querySelectorAll(".staff-item").forEach(el=>{const text=(el.dataset.search||el.textContent||"").toLowerCase();el.style.display=!q||text.includes(q)?"block":"none";});
+}
+
+function buildStaffPanel(){
+const activeUsers=users.filter(u=>u.role!=="owner"||isOwner());
+const newReports=reports.filter(r=>r.status==="Baru").length;
+let html="";
+html+='<hr style="margin:20px 0;border-color:#303746">';
+html+='<h3>Panel '+(isOwner()?"Owner":"Admin")+'</h3>';
+html+='<p style="color:#9ba3b4;margin:8px 0 15px">Kelola user, seller, buyer, produk, pesanan, dan laporan. Password tidak ditampilkan.</p>';
+html+='<div class="stats"><div class="stat"><b>'+users.length+'</b>Total User</div><div class="stat"><b>'+users.filter(u=>u.banned).length+'</b>User Banned</div><div class="stat"><b>'+products.filter(p=>p.banned).length+'</b>Produk Banned</div><div class="stat"><b>'+users.filter(u=>u.role==="admin").length+'</b>Admin</div><div class="stat"><b>'+newReports+'</b>Report Baru</div></div>';
+html+='<div class="form" style="margin-top:18px"><input id="staffSearch" placeholder="🔎 Cari nama seller / buyer / email / produk..." oninput="filterStaffPanel()"></div>';
+html+='<h3 style="margin-top:20px">👥 Kelola User / Seller / Buyer</h3>';
+if(activeUsers.length){activeUsers.forEach(function(u){
+let actions="";
+if(u.role!=="owner") actions+='<button class="btn '+(u.banned?"green":"danger")+'" onclick="'+(u.banned?'unbanUser('+u.id+')':'banUser('+u.id+')')+'">'+(u.banned?'Unban':'Ban User')+'</button>';
+if(isOwner()&&u.role!=="owner") actions+='<button class="btn" onclick="toggleAdmin('+u.id+')">'+(u.role==="admin"?'Turunkan Admin':'Jadikan Admin')+'</button>';
+html+='<div class="order staff-item" data-search="'+safe(staffText(u.name,u.email,u.role))+'"><div class="row"><div><b>'+personName(u)+'</b><p class="game">'+safe(u.email)+' • '+safe(u.role)+(u.banned?' • BANNED':'')+'</p></div><div>'+actions+'</div></div></div>';
+});}else html+='<p class="empty">Belum ada user.</p>';
+html+='<h3 style="margin-top:20px">📦 Kelola Produk</h3>';
+if(products.length){products.forEach(function(p){
+const seller=users.find(u=>u.id===p.sellerId);
+const action=p.banned?'unbanProduct('+p.id+')':'banProduct('+p.id+')';
+html+='<div class="order staff-item" data-search="'+safe(staffText(p.name,p.game,seller&&seller.name,seller&&seller.email))+'"><div class="row"><div><b>'+safe(p.name)+'</b><p class="game">Seller: '+safe(seller?seller.name:'Unknown')+' • '+safe(seller?seller.email:'-')+'</p><p class="price">'+rupiah(p.price)+'</p><p>'+(p.banned?'BANNED':'Aktif')+'</p></div><div><button class="btn '+(p.banned?'green':'danger')+'" onclick="'+action+'">'+(p.banned?'Unban Produk':'Ban Produk')+'</button></div></div></div>';
+});}else html+='<p class="empty">Belum ada produk.</p>';
+html+='<h3 style="margin-top:20px">🛒 Pesanan</h3>';
+if(orders.length){orders.forEach(function(o){
+const product=products.find(p=>p.id===o.productId),buyer=users.find(u=>u.id===o.buyerId),seller=users.find(u=>u.id===o.sellerId);
+const orderActions='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn primary" onclick="openOrderChat('+o.id+')">💬 Chat</button>'+(o.status==='Menunggu Verifikasi'?'<button class="btn green" onclick="verifyOrder('+o.id+',true)">✅ Verifikasi</button><button class="btn danger" onclick="verifyOrder('+o.id+',false)">❌ Tolak</button>':'')+'</div>';html+='<div class="order staff-item" data-search="'+safe(staffText(product&&product.name,o.productName,o.buyerTarget,buyer&&buyer.name,buyer&&buyer.email,seller&&seller.name,seller&&seller.email))+'"><b>'+safe(product?product.name:(o.productName||'Produk'))+'</b><p>Jenis: '+safe(o.type||(product&&product.type)||'Akun')+' • Game: '+safe(o.game||(product&&product.game)||'-')+'</p><p>Pembeli: '+safe(buyer?buyer.name:'Unknown')+' ('+safe(buyer?buyer.email:'-')+')</p>'+((o.buyerTarget)?'<p>Tujuan pengiriman: <b>'+safe(o.buyerTarget)+'</b></p>':'')+(o.command?'<p>Command: <b>'+safe(o.commandResolved||o.command)+'</b></p>':'')+(o.buyerNote?'<p>Catatan pembeli: <b>'+safe(o.buyerNote)+'</b></p>':'')+'<p>Seller: '+safe(seller?seller.name:'Unknown')+' ('+safe(seller?seller.email:'-')+')</p><p>Total: '+rupiah(o.price)+'</p><p>Pembayaran: '+safe(o.payment)+' • Ref: '+safe(o.reference)+'</p><p>Status: <span class="badge">'+safe(o.status)+'</span></p><p>'+safe(o.date)+'</p>'+orderActions+'</div>';
+});}else html+='<p class="empty">Belum ada pesanan.</p>';
+html+='<h3 style="margin-top:20px">📨 Kotak Report</h3><p style="color:#9ba3b4;margin:8px 0">Report dari pengguna tersimpan di sini seperti inbox email. '+(newReports?'Ada <b>'+newReports+'</b> report baru.':'Tidak ada report baru.')+'</p>';
+if(reports.length){reports.forEach(function(r){
+html+='<div class="report-box '+(r.status==='Baru'?'report-new':'report-read')+' staff-item" data-search="'+safe(staffText(r.reporterName,r.reporterEmail,r.target,r.subject,r.message))+'"><div class="mail-head"><div><b>'+safe(r.subject)+'</b><div class="mail-meta">Dari: '+safe(r.reporterName)+' • '+safe(r.reporterEmail)+' • '+safe(r.type)+(r.target?' • Target: '+safe(r.target):'')+'</div></div><span class="badge">'+safe(r.status)+'</span></div><div class="report-message">'+safe(r.message)+'</div><div class="mail-meta" style="margin-top:10px">'+safe(r.date)+'</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" onclick="markReport('+r.id+')">'+(r.status==='Baru'?'✓ Tandai Dibaca':'↩ Tandai Baru')+'</button><button class="btn danger" onclick="deleteReport('+r.id+')">🗑️ Hapus</button></div></div>';
+});}else html+='<p class="empty">Belum ada report masuk.</p>';
+if(isOwner()){
+html+='<h3 style="margin-top:20px">👑 Kelola Admin</h3>';
+activeUsers.filter(u=>u.role!=="owner").forEach(function(u){html+='<div class="order staff-item" data-search="'+safe(staffText(u.name,u.email))+'"><div class="row"><div><b>'+personName(u)+'</b><p class="game">'+safe(u.email)+' • '+safe(u.role)+'</p></div><button class="btn" onclick="toggleAdmin('+u.id+')">'+(u.role==='admin'?'Turunkan Admin':'Jadikan Admin')+'</button></div></div>';});
+}
+return html;
+}
+
+function openProfileSettings(){if(!currentUser){alert("Login terlebih dahulu.");openLogin();return;}const u=users.find(x=>x.id===currentUser.id)||currentUser;document.getElementById("profileSettings").innerHTML='<div class="profile-card">'+avatarHTML(u,"lg")+'<div><b>'+personName(u)+'</b><div class="game">'+safe(u.email)+'</div></div></div><div class="form" style="margin-top:14px"><label>Foto profil / PP</label><input id="profileAvatar" type="file" accept="image/*"><p class="game">Pilih foto langsung dari galeri. Foto akan diperkecil otomatis.</p><input id="profileName" value="'+safe(u.name)+'" placeholder="Nama"><button class="btn primary" onclick="saveProfileSettings()">💾 Simpan Profil</button><button class="btn danger" onclick="removeProfileAvatar()">🗑️ Hapus PP</button></div>';document.getElementById("profileModal").style.display="flex";}
+async function saveProfileSettings(){if(!currentUser)return;const u=users.find(x=>x.id===currentUser.id);if(!u)return;const name=document.getElementById("profileName").value.trim();const file=document.getElementById("profileAvatar").files[0];if(!name){alert("Nama tidak boleh kosong.");return;}try{if(file)u.avatar=await fileToAvatarDataUrl(file);u.name=name;currentUser=u;localStorage.setItem("rm_current",JSON.stringify(u));sessionStorage.setItem("rm_current",JSON.stringify(u));saveData();updateNav();renderProducts();closeModal("profileModal");openDashboard();}catch(e){alert("Foto gagal diproses.");}}
+function removeProfileAvatar(){if(!currentUser)return;const u=users.find(x=>x.id===currentUser.id);if(!u)return;u.avatar="";currentUser=u;localStorage.setItem("rm_current",JSON.stringify(u));sessionStorage.setItem("rm_current",JSON.stringify(u));saveData();openProfileSettings();renderProducts();}
+
+function openDashboard(){
+if(!currentUser){alert("Login terlebih dahulu.");openLogin();return;}
+const box=document.getElementById("dashboard");
+const myProducts=products.filter(p=>p.sellerId===currentUser.id);
+const myOrders=orders.filter(o=>o.buyerId===currentUser.id||o.sellerId===currentUser.id);
+
+const adminSection=isStaff()?buildStaffPanel():"";
+const orderHistory=myOrders.length?'<h3 style="margin-top:20px">🛒 Pesanan Saya</h3>'+myOrders.map(function(o){const product=products.find(p=>p.id===o.productId);const buyer=users.find(u=>u.id===o.buyerId);const seller=users.find(u=>u.id===o.sellerId);const canVerify=(isStaff()||o.sellerId===currentUser.id)&&o.status==='Menunggu Verifikasi';const alreadyRated=productReviews(o.productId).some(r=>r.buyerId===currentUser.id);const actions='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn primary" onclick="openOrderChat('+o.id+')">💬 Chat</button>'+(canVerify?'<button class="btn green" onclick="verifyOrder('+o.id+',true)">✅ Verifikasi</button><button class="btn danger" onclick="verifyOrder('+o.id+',false)">❌ Tolak</button>':'')+(o.status==='Diverifikasi'&&!alreadyRated&&o.buyerId===currentUser.id?'<button class="btn" onclick="showProduct('+o.productId+')">⭐ Beri Rating</button>':'')+'</div>';return '<div class="order"><b>'+safe(o.productName||(product&&product.name)||"Produk")+'</b><p class="game">'+safe(o.game||(product&&product.game)||"-")+' • '+safe(o.type||(product&&product.type)||"Akun")+'</p><p>Pembeli: '+personName(buyer)+' ('+safe(buyer?buyer.email:"-")+')</p><p>Seller: '+personName(seller)+'</p>'+(o.buyerTarget?'<p>Tujuan pengiriman: <b>'+safe(o.buyerTarget)+'</b></p>':'')+(o.command?'<p>Command: <b>'+safe(o.commandResolved||o.command)+'</b></p>':'')+(o.buyerNote?'<p>Catatan: <b>'+safe(o.buyerNote)+'</b></p>':'')+'<p class="price">'+rupiah(o.price)+'</p><p>Status: <span class="badge">'+safe(o.status)+'</span></p><p class="game">Ref: '+safe(o.reference||'-')+' • '+safe(o.date)+'</p>'+actions+'</div>';}).join(""): '<h3 style="margin-top:20px">🛒 Pesanan Saya</h3><p class="empty">Belum ada pesanan.</p>';
+
+box.innerHTML=`
+<h2>Dashboard</h2><div class="profile-line" style="margin-top:10px">${avatarHTML(currentUser)}<p style="color:#9ba3b4;margin:0">Login sebagai: <b>${personName(currentUser)}</b></p></div><button class="btn" style="margin-top:10px" onclick="requestChatNotifications()">🔔 Aktifkan Notifikasi Chat</button>
+<div class="stats">
+<div class="stat"><b>${myProducts.length}</b>Produk Saya</div>
+<div class="stat"><b>${myOrders.length}</b>Pesanan</div>
+<div class="stat"><b>${myProducts.reduce((a,p)=>a+Number(p.stock||0),0)}</b>Total Stok</div>
+</div>
+<hr style="margin:20px 0;border-color:#303746">
+<h3>Produk Saya</h3>
+${myProducts.length?myProducts.map(p=>`
+<div class="order">
+<div class="row"><div>
+<b>${safe(p.name)}</b><p class="game">${safe(p.game)}</p>
+<p class="price">${rupiah(p.price)}</p>
+<p>Stok: <b>${stockText(p.stock??1)}</b></p><p class="game">DANA: ${safe(p.dana||"Belum diatur")}</p>
+</div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end">
+<button class="btn primary" onclick="editProduct(${p.id})">✏️ Edit</button>
+<button class="btn danger" onclick="deleteProduct(${p.id})">🗑️ Hapus</button>
+</div></div></div>`).join(""):'<p class="empty">Belum ada produk.</p>'}
+${orderHistory}
+${adminSection}`;
+document.getElementById("dashboardModal").style.display="flex";
+}
+
+updateChatBadge();
+setInterval(()=>{
+ try{
+  const freshMessages=JSON.parse(localStorage.getItem("xstore_messages"))||[];
+  const before=messages.length; messages=freshMessages;
+  updateChatBadge();
+  if(currentUser && messages.length>before){
+    const latest=messages[messages.length-1];
+    if(latest && latest.recipientId===currentUser.id && !latest.read && latest.senderId!==currentUser.id && "Notification" in window && Notification.permission==="granted") new Notification("Xstore • Pesan baru",{body:String(latest.text).slice(0,100)});
+  }
+ }catch(e){}
+},1500);
+window.addEventListener("storage",e=>{if(e.key==="xstore_messages"){try{messages=JSON.parse(e.newValue)||[];}catch(_){}updateChatBadge();}});
+window.addEventListener("load",()=>{setTimeout(()=>document.getElementById("loadingScreen")?.classList.add("hide"),450);});
+setTimeout(()=>document.getElementById("loadingScreen")?.classList.add("hide"),1800);
+
+document.querySelectorAll(".modal").forEach(modal=>{
+modal.addEventListener("click",function(e){if(e.target===modal)modal.style.display="none";});
+});
+
+const imageInput=document.getElementById("productImage");
+if(imageInput){imageInput.addEventListener("change",async function(){const f=this.files[0];if(!f)return;if(f.size>8*1024*1024){alert("Gambar produk maksimal 8 MB.");this.value="";return;}try{const data=await compressProductImage(f);document.getElementById("productImagePreview").innerHTML=`<img src="${data}" style="max-width:240px;width:100%;border-radius:10px;margin-top:6px"><p class="game">Gambar siap disimpan.</p>`;}catch(e){alert("Gambar gagal diproses.");}});}
+
+const qrInput=document.getElementById("productQr");
+if(qrInput){qrInput.addEventListener("change",async function(){
+ const f=this.files[0];
+ if(!f)return;
+ if(f.size>2*1024*1024){alert("Foto QR maksimal 2 MB.");this.value="";return;}
+ try{
+  const data=await fileToDataUrl(f);
+  document.getElementById("productQrPreview").innerHTML=`<img src="${data}" style="max-width:180px;border-radius:10px;margin-top:6px;background:white;padding:6px"><p class="game">QR baru siap disimpan.</p>`;
+  document.getElementById("removeQrBtn").style.display="block";
+ }catch(e){alert("QR gagal dibaca.");}
+});}
+
+renderProducts();
+updateNav();
+</script>
+<div id="commandConfirm" class="command-confirm-backdrop"><div class="command-confirm-box"><h3>⚡ Jalankan Command?</h3><p class="game" style="margin-top:6px">Perintah dari seller:</p><div id="commandConfirmText" class="command-confirm-code"></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px"><button class="btn" onclick="answerCommand(false)">Tidak, kembali</button><button class="btn primary" onclick="answerCommand(true)">Iya, Login</button></div></div></div>
+<button id="globalChatBtn" type="button"><span class="gc-dot"></span>Global Chat</button>
+<div id="globalChatPanel" aria-hidden="true">
+  <div class="gc-head">
+    <div><strong>💬 Xstore Global Chat</strong><small>Chat semua pengguna</small></div>
+    <button class="gc-close" type="button" id="globalChatClose">✕</button>
+  </div>
+  <div class="gc-messages" id="globalChatMessages"></div>
+  <form class="gc-form" id="globalChatForm">
+    <input id="globalChatInput" maxlength="500" autocomplete="off" placeholder="Tulis pesan..." />
+    <button id="globalChatSend" type="submit">Kirim</button>
+  </form>
+</div>
+
+
+<script id="xstore-global-chat-js">
+(function(){
+  const KEY='xstore_global_chat';
+  const btn=document.getElementById('globalChatBtn');
+  const panel=document.getElementById('globalChatPanel');
+  const close=document.getElementById('globalChatClose');
+  const box=document.getElementById('globalChatMessages');
+  const form=document.getElementById('globalChatForm');
+  const input=document.getElementById('globalChatInput');
+
+  function esc(s){
+    return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+  function getUser(){
+    try{
+      const raw=localStorage.getItem('rm_current')||sessionStorage.getItem('rm_current');
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return null;
+  }
+  function getAvatar(u){
+    return u && (u.avatar||u.photo||u.profilePic||u.pp) ? (u.avatar||u.photo||u.profilePic||u.pp) : '';
+  }
+  function roleTitle(u){
+    const role=(u&&u.role)||'user';
+    return `<span class="role-title role-${role==='owner'?'owner':role==='admin'?'admin':'user'}">(${role==='owner'?'owner':role==='admin'?'admin':'user'})</span>`;
+  }
+  function nameOf(u){
+    const n=(u&&(u.name||u.username||u.email))||'User';
+    return `${esc(n)} ${roleTitle(u)}`;
+  }
+  function read(){
+    try{return JSON.parse(localStorage.getItem(KEY)||sessionStorage.getItem(KEY)||'[]')}catch(e){return []}
+  }
+  function save(a){localStorage.setItem(KEY,JSON.stringify(a.slice(-300))); try{sessionStorage.setItem(KEY,JSON.stringify(a.slice(-300)))}catch(e){}}
+  function render(){
+    const msgs=read();
+    if(!msgs.length){box.innerHTML='';return}
+    box.innerHTML=msgs.map(m=>{
+      const av=m.avatar?`<img class="gc-avatar" src="${esc(m.avatar)}" alt="">`:`<div class="gc-avatar"></div>`;
+      return `<div class="gc-msg">${av}<div class="gc-body"><div class="gc-name">${nameOf(m.user)}<span class="gc-time">${esc(m.time||'')}</span></div><div class="gc-text">${esc(m.text)}</div></div></div>`;
+    }).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+  function open(){panel.classList.add('open');panel.setAttribute('aria-hidden','false');render();setTimeout(()=>input.focus(),50)}
+  function shut(){panel.classList.remove('open');panel.setAttribute('aria-hidden','true')}
+  btn.addEventListener('click',()=>panel.classList.contains('open')?shut():open());
+  close.addEventListener('click',shut);
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const u=getUser();
+    if(!u){ return; }
+    const text=input.value.trim();
+    if(!text)return;
+    const a=read();
+    a.push({
+      id:'GC-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),
+      user:{name:u.name||u.username||u.email,username:u.username||'',role:u.role||'user'},
+      avatar:getAvatar(u),
+      text:text,
+      time:new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})
+    });
+    save(a);input.value='';render();
+  });
+  window.addEventListener('storage',e=>{if(e.key===KEY)render()});
+  window.addEventListener('focus',render);
+  render();
+})();
+</script>
+
+<script>document.addEventListener("DOMContentLoaded",toggleRobloxFilter);</script>
+</body>
+</html>
